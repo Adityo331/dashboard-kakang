@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>FRI Dashboard</title>
+
+    <!-- CSS -->
+
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- ICON -->
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+      <link rel="icon" href="assets/images/Logotlkm.png" />
+  </head>
+
+  <body>
+    <!-- LOGIN -->
+
+    <div class="login-page">
+      <div class="login-card">
+        <div class="logo-box">
+          <img
+            src="./assets/images/frilogo.png"
+            alt="FRI Logo"
+            class="logo"
+            width="300"
+            height="100"
+          />
+        </div>
+
+        <h1>FRI Dashboard</h1>
+
+        <p>Monitoring Anggaran Laboratorium</p>
+
+        <!-- LOGIN FORM -->
+
+        <div id="loginForm">
+          <div class="input-group">
+            <label>Username</label>
+
+            <input
+              type="text"
+              id="loginUsername"
+              placeholder="Masukkan username"
+            />
+          </div>
+
+          <div class="input-group">
+            <label>Password</label>
+
+            <input
+              type="password"
+              id="loginPassword"
+              placeholder="Masukkan password"
+            />
+          </div>
+
+          <button class="btn" onclick="login()">Login</button>
+
+          <p class="switch-text">
+            Belum punya akun?
+
+            <span onclick="showRegister()"> Daftar </span>
+          </p>
+        </div>
+
+        <!-- REGISTER FORM -->
+
+        <div id="registerForm" style="display: none">
+          <div class="input-group">
+            <label>Username</label>
+
+            <input
+              type="text"
+              id="registerUsername"
+              placeholder="Masukkan username"
+            />
+          </div>
+
+          <div class="input-group">
+            <label>Password</label>
+
+            <input
+              type="password"
+              id="registerPassword"
+              placeholder="Masukkan password"
+            />
+          </div>
+
+          <button class="btn" onclick="register()">Daftar Akun</button>
+
+          <p class="switch-text">
+            Sudah punya akun?
+
+            <span onclick="showLogin()"> Login </span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- JS -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/supabase-sync.js"></script>
+    <script src="js/auth.js"></script>
+  </body>
+</html>

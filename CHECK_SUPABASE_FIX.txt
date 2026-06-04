@@ -1,0 +1,42 @@
+HASIL PERBAIKAN SUPABASE - FRI DASHBOARD
+
+1. URL Supabase diperbaiki menjadi:
+   https://rgqxyrytjqtsreisebyf.supabase.co
+
+2. URL tidak memakai /rest/v1/ karena createClient Supabase JS membutuhkan base URL project.
+
+3. File yang diperbaiki:
+   - js/supabase-client.js
+     * URL project diperbaiki sesuai URL yang diberikan.
+     * Ditambahkan helper checkFriSupabaseConnection() untuk cek koneksi dan tabel.
+   - js/supabase-sync.js
+     * friQueueSync sekarang mengembalikan Promise.
+     * Ditambahkan friSaveItem() agar proses simpan bisa menunggu sync Supabase selesai.
+     * Ditambahkan friGetSyncStatus() untuk melihat error terakhir.
+   - js/auth.js
+     * Register user dibuat async dan menunggu sync ke tabel users.
+     * Inisialisasi akun default laboran/keuangan tidak lagi langsung menimpa data users sebelum data Supabase selesai dibaca.
+   - js/bhp.js
+     * Tambah/edit/hapus pengajuan BHP menunggu sync ke tabel pengajuan_bhp.
+   - js/laboran-bhp.js
+     * Pengajuan BHP laboran menunggu sync ke tabel pengajuan_bhp.
+   - js/laboran-honorarium.js
+     * Pengajuan honorarium menunggu sync ke tabel honorarium.
+   - js/keuangan-bhp.js
+     * Approve/reject BHP menunggu sync Supabase.
+   - js/keuangan-honorarium.js
+     * Approve/reject honorarium menunggu sync Supabase.
+   - pages/simulasi-honor.html
+     * Duplikasi pemanggilan main.js dihapus.
+   - README_SUPABASE.md
+     * Panduan disesuaikan dengan tabel terpisah, bukan app_state.
+
+4. Cara test di browser Console:
+   checkFriSupabaseConnection()
+   forceFriSyncNow()
+   friGetSyncStatus()
+
+5. Semua file JavaScript sudah lolos pengecekan syntax dengan node --check.
+
+CATATAN PENTING:
+Jika URL sudah benar tetapi data tetap tidak masuk, kemungkinan besar SUPABASE_ANON_KEY di js/supabase-client.js bukan milik project rgqxyrytjqtsreisebyf atau SQL supabase_schema.sql belum dijalankan di project tersebut.
