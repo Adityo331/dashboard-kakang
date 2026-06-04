@@ -1,0 +1,4 @@
+addHonorarium();
+editHonorarium();
+deleteHonorarium();
+renderHonorarium();
