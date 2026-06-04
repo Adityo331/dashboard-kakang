@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Monitoring Anggaran</title>
+
+    <link rel="stylesheet" href="../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+      <link rel="icon" href="../assets/images/Logotlkm.png" />
+  </head>
+
+  <body>
+    <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Buka menu">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="mobile-sidebar-overlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar">
+      <div>
+        <div
+          class="sidebar-logo"
+          style="
+            background-color: rgb(222, 142, 142);
+            width: 110%;
+            padding: 20px 0;
+            margin-left: -10px;
+            border-radius: 20px;
+          "
+        >
+          <img
+            src="../assets/images/Logotlkm.png"
+            alt="Logo Telkom"
+            width="70"
+          />
+          <h2>FRI Dashboard</h2>
+        </div>
+
+        <ul class="menu">
+          <li onclick="window.location.href = 'keuangan.html'">
+            <i class="fa-solid fa-house"></i>
+            Dashboard Keuangan
+          </li>
+
+          <li onclick="window.location.href = 'keuangan-bhp.html'">
+            <i class="fa-solid fa-box"></i>
+            Validasi BHP
+          </li>
+
+          <li onclick="window.location.href = 'keuangan-honorarium.html'">
+            <i class="fa-solid fa-money-check"></i>
+            Validasi Honorarium
+          </li>
+
+          <li class="active">
+            <i class="fa-solid fa-chart-line"></i>
+            Monitoring Anggaran
+          </li>
+        </ul>
+      </div>
+
+      <button class="logout-btn" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Logout
+      </button>
+    </div>
+
+    <div class="main-content">
+      <div class="topbar">
+        <div>
+          <h1>Monitoring Anggaran</h1>
+          <p>
+            Rekap realisasi BHP, honorarium, dan transaksi harian laboratorium.
+          </p>
+        </div>
+
+        <div class="notification-wrapper">
+          <button class="notif-btn" onclick="openNotificationPanel()">
+            <i class="fa-solid fa-bell"></i>
+            <span id="notifBadge" class="notif-badge">0</span>
+          </button>
+
+          <div class="notification-panel hidden" id="notificationPanel">
+            <div class="notif-header">
+              <h3>Notifikasi</h3>
+              <button onclick="markAllNotificationsRead()">Tandai Dibaca</button>
+            </div>
+
+            <div id="notificationList"></div>
+          </div>
+        </div>
+
+        <div class="profile-box">
+          <div class="avatar">K</div>
+          <div>
+            <h4>Staff Keuangan</h4>
+            <p>Keuangan FRI</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="budget-layout">
+        <div class="budget-form-card">
+          <h2>Input Anggaran Tahunan</h2>
+          <p>
+            Masukkan anggaran tahunan untuk menghitung sisa dana dan realisasi.
+          </p>
+
+          <div class="input-group">
+            <label>Total Anggaran Tahunan</label>
+            <input
+              type="number"
+              id="monitoringBudget"
+              placeholder="Contoh: 1200000000"
+            />
+          </div>
+
+          <div class="monitoring-action-row">
+            <button class="btn" onclick="renderMonitoring()">
+              Update Monitoring
+            </button>
+
+            <button class="btn btn-export" onclick="exportLaporanCSV()">
+              <i class="fa-solid fa-file-csv"></i>
+              Export Laporan CSV
+            </button>
+          </div>
+        </div>
+
+        <div class="budget-summary-card">
+          <h2>Ringkasan Keuangan</h2>
+
+          <div class="budget-big-number">
+            <span>Total Anggaran</span>
+            <h1 id="monitorTotalBudget">Rp 0</h1>
+          </div>
+
+          <div class="budget-big-number red-text">
+            <span>Total Realisasi</span>
+            <h1 id="monitorTotalRealisasi">Rp 0</h1>
+          </div>
+
+          <div class="budget-big-number green-text">
+            <span>Sisa Anggaran</span>
+            <h1 id="monitorSisaBudget">Rp 0</h1>
+          </div>
+        </div>
+      </div>
+
+      <div class="cards">
+        <div class="card stat-card">
+          <div class="stat-info">
+            <h2 id="monitorBhpTotal">Rp 0</h2>
+            <p>Estimasi Realisasi BHP</p>
+          </div>
+
+          <div class="card-icon red ornament-icon">
+            <i class="fa-solid fa-box"></i>
+          </div>
+        </div>
+
+        <div class="card stat-card">
+          <div class="stat-info">
+            <h2 id="monitorHonorTotal">Rp 0</h2>
+            <p>Realisasi Honorarium</p>
+          </div>
+
+          <div class="card-icon green ornament-icon">
+            <i class="fa-solid fa-money-check"></i>
+          </div>
+        </div>
+
+        <div class="card stat-card">
+          <div class="stat-info">
+            <h2 id="monitorDailyTotal">Rp 0</h2>
+            <p>Transaksi Harian</p>
+          </div>
+
+          <div class="card-icon yellow ornament-icon">
+            <i class="fa-solid fa-receipt"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="cards live-stats-grid">
+        <div class="card stat-card">
+          <div class="stat-info">
+            <h2 id="monitorTotalTransaksi">0</h2>
+            <p>Total Transaksi Approved</p>
+          </div>
+          <div class="card-icon red ornament-icon">
+            <i class="fa-solid fa-list-check"></i>
+          </div>
+        </div>
+
+        <div class="card stat-card">
+          <div class="stat-info">
+            <h2 id="monitorApprovalRate">0%</h2>
+            <p>Rasio Approval</p>
+          </div>
+          <div class="card-icon green ornament-icon">
+            <i class="fa-solid fa-chart-simple"></i>
+          </div>
+        </div>
+
+        <div class="card stat-card">
+          <div class="stat-info">
+            <h2 id="monitorTopLab">-</h2>
+            <p>Lab Pengeluaran Terbesar</p>
+          </div>
+          <div class="card-icon yellow ornament-icon">
+            <i class="fa-solid fa-building-columns"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-section">
+        <div class="table-header">
+          <div>
+            <h2>Grafik Realisasi per Kuartal</h2>
+            <p>Gabungan transaksi harian berdasarkan tanggal transaksi.</p>
+          </div>
+        </div>
+
+        <div class="bar-chart-box">
+          <div class="bar-item">
+            <div class="bar-wrapper">
+              <div class="bar-fill" id="monitorQ1Bar"></div>
+            </div>
+            <p>Q1</p>
+            <small id="monitorQ1Value">Rp 0</small>
+          </div>
+
+          <div class="bar-item">
+            <div class="bar-wrapper">
+              <div class="bar-fill" id="monitorQ2Bar"></div>
+            </div>
+            <p>Q2</p>
+            <small id="monitorQ2Value">Rp 0</small>
+          </div>
+
+          <div class="bar-item">
+            <div class="bar-wrapper">
+              <div class="bar-fill" id="monitorQ3Bar"></div>
+            </div>
+            <p>Q3</p>
+            <small id="monitorQ3Value">Rp 0</small>
+          </div>
+
+          <div class="bar-item">
+            <div class="bar-wrapper">
+              <div class="bar-fill" id="monitorQ4Bar"></div>
+            </div>
+            <p>Q4</p>
+            <small id="monitorQ4Value">Rp 0</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-section">
+        <div class="table-header">
+          <div>
+            <h2>Rekap Pengajuan Approved</h2>
+            <p>Daftar BHP dan honorarium yang sudah disetujui keuangan.</p>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Jenis</th>
+              <th>Pengaju</th>
+              <th>Laboratorium</th>
+              <th>Detail</th>
+              <th>Nominal</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody id="monitoringApprovedTable"></tbody>
+        </table>
+      </div>
+
+      <div class="table-section">
+        <div class="table-header">
+          <div>
+            <h2>Riwayat Aktivitas</h2>
+            <p>Log aktivitas approval, reject, dan pengajuan terbaru.</p>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Waktu</th>
+              <th>Modul</th>
+              <th>Aktor</th>
+              <th>Aktivitas</th>
+              <th>Detail</th>
+            </tr>
+          </thead>
+          <tbody id="activityLogTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-client.js"></script>
+    <script src="../js/supabase-sync.js"></script>
+    <script src="../js/master-data.js"></script>
+    <script src="../js/activity.js"></script>
+    <script src="../js/notification.js"></script>
+    <script src="../js/file-action.js"></script>
+    <script src="../js/keuangan-monitoring.js"></script>
+    <script src="../js/main.js"></script>
+  </body>
+</html>

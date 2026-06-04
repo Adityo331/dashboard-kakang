@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Dashboard Keuangan</title>
+
+    <link rel="stylesheet" href="../css/style.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+      <link rel="icon" href="../assets/images/Logotlkm.png" />
+  </head>
+
+  <body>
+    <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Buka menu">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="mobile-sidebar-overlay" onclick="toggleSidebar()"></div>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div>
+        <div
+          class="sidebar-logo"
+          style="
+            background-color: rgb(222, 142, 142);
+            width: 110%;
+            padding: 20px 0;
+            margin-left: -10px;
+            border-radius: 20px;
+          "
+        >
+          <img
+            src="../assets/images/Logotlkm.png"
+            alt="Logo Telkom"
+            width="70"
+          />
+          <h2>FRI Dashboard</h2>
+        </div>
+
+        <ul class="menu">
+          <li class="active">
+            <i class="fa-solid fa-house"></i>
+            Dashboard Keuangan
+          </li>
+
+          <li onclick="window.location.href = 'keuangan-bhp.html'">
+            <i class="fa-solid fa-box"></i>
+            Validasi BHP
+          </li>
+
+          <li onclick="window.location.href = 'keuangan-honorarium.html'">
+            <i class="fa-solid fa-money-check"></i>
+            Validasi Honorarium
+          </li>
+
+          <li onclick="window.location.href = 'keuangan-monitoring.html'">
+            <i class="fa-solid fa-chart-line"></i>
+            Monitoring Anggaran
+          </li>
+        </ul>
+      </div>
+
+      <button class="logout-btn" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Logout
+      </button>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main-content">
+      <div class="topbar">
+        <div>
+          <h1>Dashboard Keuangan</h1>
+          <p>
+            Monitoring dan validasi akhir pengajuan anggaran Laboratorium FRI
+          </p>
+        </div>
+
+        <div class="notification-wrapper">
+          <button class="notif-btn" onclick="openNotificationPanel()">
+            <i class="fa-solid fa-bell"></i>
+            <span id="notifBadge" class="notif-badge">0</span>
+          </button>
+
+          <div class="notification-panel hidden" id="notificationPanel">
+            <div class="notif-header">
+              <h3>Notifikasi</h3>
+              <button onclick="markAllNotificationsRead()">Tandai Dibaca</button>
+            </div>
+
+            <div id="notificationList"></div>
+          </div>
+        </div>
+
+        <div class="profile-box">
+          <div class="avatar">K</div>
+
+          <div>
+            <h4>Staff Keuangan</h4>
+            <p>Keuangan FRI</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARDS -->
+      <div class="cards">
+        <div class="card stat-card">
+          <div class="stat-info">
+            <h2 id="totalBhp">0</h2>
+            <p>Total Pengajuan BHP</p>
+          </div>
+
+          <div class="card-icon red ornament-icon">
+            <i class="fa-solid fa-box"></i>
+          </div>
+        </div>
+
+        <div class="card stat-card">
+          <div class="stat-info">
+            <h2 id="totalHonor">0</h2>
+            <p>Total Pengajuan Honorarium</p>
+          </div>
+
+          <div class="card-icon green ornament-icon">
+            <i class="fa-solid fa-money-check"></i>
+          </div>
+        </div>
+
+        <div class="card stat-card">
+          <div class="stat-info">
+            <h2 id="totalPending">0</h2>
+            <p>Menunggu Validasi</p>
+          </div>
+
+          <div class="card-icon yellow ornament-icon">
+            <i class="fa-solid fa-clock"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- INFO -->
+      <div class="table-section">
+        <div class="table-header">
+          <div>
+            <h2>Ringkasan Tugas Keuangan</h2>
+            <p>
+              Keuangan melakukan validasi akhir terhadap pengajuan yang telah
+              diproses laboran.
+            </p>
+          </div>
+        </div>
+
+        <div class="tracking-container">
+          <div class="tracking-card pending">
+            <div class="tracking-icon">
+              <i class="fa-solid fa-clock"></i>
+            </div>
+
+            <div>
+              <h3>Pending</h3>
+              <p>Pengajuan menunggu validasi akhir keuangan.</p>
+            </div>
+          </div>
+
+          <div class="tracking-card approved">
+            <div class="tracking-icon">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+
+            <div>
+              <h3>Approved</h3>
+              <p>Pengajuan disetujui dan siap diproses pencairan.</p>
+            </div>
+          </div>
+
+          <div class="tracking-card reject">
+            <div class="tracking-icon">
+              <i class="fa-solid fa-circle-xmark"></i>
+            </div>
+
+            <div>
+              <h3>Rejected</h3>
+              <p>Pengajuan dikembalikan untuk revisi.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABLE TERBARU -->
+      <div class="table-section">
+        <div class="table-header">
+          <div>
+            <h2>Pengajuan Terbaru</h2>
+            <p>Daftar pengajuan terbaru yang masuk ke bagian keuangan.</p>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Jenis</th>
+              <th>Pengaju</th>
+              <th>Laboratorium</th>
+              <th>Detail</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody id="keuanganLatestTable"></tbody>
+        </table>
+      </div>
+    </div>
+    <li onclick="window.location.href = 'keuangan-bhp.html'"></li>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-client.js"></script>
+    <script src="../js/supabase-sync.js"></script>
+    <script src="../js/master-data.js"></script>
+    <script src="../js/notification.js"></script>
+    <script src="../js/file-action.js"></script>
+    <script src="../js/keuangan.js"></script>
+    <script src="../js/main.js"></script>
+  </body>
+</html>

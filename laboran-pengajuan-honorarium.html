@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Pengajuan Honorarium</title>
+
+    <link rel="stylesheet" href="../css/style.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+      <link rel="icon" href="../assets/images/Logotlkm.png" />
+  </head>
+
+  <body>
+    <button
+      class="mobile-menu-btn"
+      onclick="toggleSidebar()"
+      aria-label="Buka menu"
+    >
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="mobile-sidebar-overlay" onclick="toggleSidebar()"></div>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div>
+        <div
+          class="sidebar-logo"
+          style="
+            background-color: rgb(222, 142, 142);
+            width: 110%;
+            padding: 20px 0;
+            margin-left: -10px;
+            border-radius: 20px;
+          "
+        >
+          <img
+            src="../assets/images/Logotlkm.png"
+            alt="Logo Telkom"
+            width="70"
+          />
+
+          <h2>FRI Dashboard</h2>
+        </div>
+
+        <ul class="menu">
+          <li onclick="window.location.href = 'laboran.html'">
+            <i class="fa-solid fa-house"></i>
+            Dashboard Laboran
+          </li>
+
+          <li onclick="window.location.href = 'laboran-pengajuan-bhp.html'">
+            <i class="fa-solid fa-box"></i>
+            Pengajuan BHP
+          </li>
+
+          <li class="active">
+            <i class="fa-solid fa-money-check"></i>
+            Pengajuan Honorarium
+          </li>
+
+          <li onclick="window.location.href = 'laboran-simulasi-anggaran.html'">
+            <i class="fa-solid fa-chart-pie"></i>
+            Simulasi Anggaran
+          </li>
+        </ul>
+      </div>
+
+      <button class="logout-btn" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Logout
+      </button>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main-content">
+      <div class="topbar">
+        <div>
+          <h1>Pengajuan Honorarium</h1>
+          <p>Kelola pengajuan honorarium berdasarkan rekap BAP praktikum</p>
+        </div>
+
+        <div class="notification-wrapper">
+          <button class="notif-btn" onclick="openNotificationPanel()">
+            <i class="fa-solid fa-bell"></i>
+            <span id="notifBadge" class="notif-badge">0</span>
+          </button>
+
+          <div class="notification-panel hidden" id="notificationPanel">
+            <div class="notif-header">
+              <h3>Notifikasi</h3>
+              <button onclick="markAllNotificationsRead()">
+                Tandai Dibaca
+              </button>
+            </div>
+
+            <div id="notificationList"></div>
+          </div>
+        </div>
+
+        <div class="profile-box">
+          <div class="avatar">L</div>
+
+          <div>
+            <h4>Staff Laboratorium</h4>
+            <p>Laboran FRI</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-section">
+        <div class="table-header">
+          <div>
+            <h2>Data Pengajuan Honorarium</h2>
+            <p>
+              Periode pengajuan dapat berupa rekap 1 minggu, 2 minggu, atau 1
+              bulan.
+            </p>
+          </div>
+
+          <button class="btn" onclick="openHonorModal()">
+            Tambah Pengajuan
+          </button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Pengaju</th>
+              <th>Laboratorium</th>
+              <th>PIC</th>
+              <th>Periode Mulai</th>
+              <th>Periode Selesai</th>
+              <th>Total Asisten</th>
+              <th>Total Honor</th>
+              <th>BAP Praktikum</th>
+              <th>Status</th>
+              <th>Komentar</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+
+          <tbody id="honorariumTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal hidden" id="honorModal">
+      <div class="modal-content">
+        <h2>Tambah Pengajuan Honorarium</h2>
+
+        <div class="input-group">
+          <label>Laboratorium</label>
+          <input
+            type="text"
+            id="labHonorInput"
+            placeholder="Contoh: Laboratorium Sispromasi"
+          />
+        </div>
+
+        <div class="input-group">
+          <label>PIC</label>
+          <input
+            type="text"
+            id="picHonorInput"
+            placeholder="Contoh: Nama PIC Laboratorium"
+          />
+        </div>
+
+        <div class="input-group">
+          <label>Periode Mulai</label>
+
+          <input type="date" id="periodeMulaiInput" />
+        </div>
+
+        <div class="input-group">
+          <label>Periode Selesai</label>
+
+          <input type="date" id="periodeSelesaiInput" />
+        </div>
+
+        <div class="input-group">
+          <label>Total Asisten</label>
+
+          <input
+            type="number"
+            id="totalAsistenInput"
+            placeholder="Contoh: 12"
+          />
+        </div>
+
+        <div class="input-group">
+          <label>Total Honorarium</label>
+
+          <input
+            type="number"
+            id="totalHonorInput"
+            placeholder="Contoh: 2500000"
+          />
+        </div>
+
+        <div class="input-group">
+          <label>Upload BAP Praktikum yang Sudah Ditandatangani (PDF)</label>
+
+          <input type="file" id="bapInput" accept=".pdf" />
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn" onclick="saveHonorarium()">
+            Simpan Pengajuan
+          </button>
+
+          <button class="btn close-btn" onclick="closeHonorModal()">
+            Tutup
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-client.js"></script>
+    <script src="../js/supabase-sync.js"></script>
+    <script src="../js/master-data.js"></script>
+    <script src="../js/activity.js"></script>
+    <script src="../js/notification.js"></script>
+    <script src="../js/file-action.js"></script>
+    <script src="../js/laboran-honorarium.js"></script>
+    <script src="../js/main.js"></script>
+  </body>
+</html>

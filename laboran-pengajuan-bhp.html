@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Pengajuan BHP Laboran</title>
+
+    <link rel="stylesheet" href="../css/style.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+      <link rel="icon" href="../assets/images/Logotlkm.png" />
+  </head>
+
+  <body>
+    <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Buka menu">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="mobile-sidebar-overlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar">
+      <div>
+        <div
+          class="sidebar-logo"
+          style="
+            background-color: rgb(222, 142, 142);
+            width: 110%;
+            padding: 20px 0;
+            margin-left: -10px;
+            border-radius: 20px;
+          "
+        >
+          <img
+            src="../assets/images/Logotlkm.png"
+            alt="Logo Telkom"
+            width="70"
+          />
+          <h2>FRI Dashboard</h2>
+        </div>
+
+        <ul class="menu">
+          <li onclick="window.location.href = 'laboran.html'">
+            <i class="fa-solid fa-house"></i>
+            Dashboard Laboran
+          </li>
+
+          <li class="active">
+            <i class="fa-solid fa-box"></i>
+            Pengajuan BHP
+          </li>
+
+          <li
+            onclick="window.location.href = 'laboran-pengajuan-honorarium.html'"
+          >
+            <i class="fa-solid fa-money-check"></i>
+            Pengajuan Honorarium
+          </li>
+
+          <li onclick="window.location.href = 'laboran-simulasi-anggaran.html'">
+            <i class="fa-solid fa-chart-pie"></i>
+            Simulasi Anggaran
+          </li>
+        </ul>
+      </div>
+
+      <button class="logout-btn" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Logout
+      </button>
+    </div>
+
+    <div class="main-content">
+      <div class="topbar">
+        <div>
+          <h1>Pengajuan BHP Laboran</h1>
+          <p>Kelola pengajuan barang habis pakai dari pihak laboratorium</p>
+        </div>
+
+        <div class="notification-wrapper">
+          <button class="notif-btn" onclick="openNotificationPanel()">
+            <i class="fa-solid fa-bell"></i>
+            <span id="notifBadge" class="notif-badge">0</span>
+          </button>
+
+          <div class="notification-panel hidden" id="notificationPanel">
+            <div class="notif-header">
+              <h3>Notifikasi</h3>
+              <button onclick="markAllNotificationsRead()">Tandai Dibaca</button>
+            </div>
+
+            <div id="notificationList"></div>
+          </div>
+        </div>
+
+        <div class="profile-box">
+          <div class="avatar">L</div>
+          <div>
+            <h4>Staff Laboratorium</h4>
+            <p>Laboran FRI</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-section">
+        <div class="table-header">
+          <div>
+            <h2>Data Pengajuan BHP</h2>
+            <p>Laboran dapat menambah, mengedit, dan menghapus pengajuan BHP</p>
+          </div>
+
+          <button class="btn" onclick="openLaboranBhpModal()">
+            Tambah Pengajuan
+          </button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Pengaju</th>
+              <th>Laboratorium</th>
+              <th>PIC</th>
+              <th>Barang</th>
+              <th>Tanggal</th>
+              <th>Proposal</th>
+              <th>Status</th>
+              <th>Komentar</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+
+          <tbody id="laboranBhpTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="modal hidden" id="laboranBhpModal">
+      <div class="modal-content approve-modal">
+        <h2>Tambah Pengajuan BHP</h2>
+
+        <div class="input-row">
+          <div class="input-group">
+            <label>Laboratorium</label>
+            <input
+              type="text"
+              id="labInput"
+              placeholder="Contoh: Lab Ergonomi"
+            />
+          </div>
+
+          <div class="input-group">
+            <label>Nama Barang</label>
+            <input
+              type="text"
+              id="barangInput"
+              placeholder="Contoh: Kabel LAN"
+            />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Detail</label>
+          <textarea id="detailInput" rows="3"></textarea>
+        </div>
+
+        <div class="input-group">
+          <label>Link Pembelian</label>
+          <input type="text" id="linkInput" />
+        </div>
+
+        <div class="input-row">
+          <div class="input-group">
+            <label>Jenis Kebutuhan</label>
+            <input type="text" id="jenisInput" />
+          </div>
+
+          <div class="input-group">
+            <label>Tanggal Penggunaan</label>
+            <input type="date" id="tanggalInput" />
+          </div>
+        </div>
+
+        <div class="input-row">
+          <div class="input-group">
+            <label>PIC</label>
+            <input type="text" id="picInput" />
+          </div>
+
+          <div class="input-group">
+            <label>Tipe Pertanggungan</label>
+            <input type="text" id="tipeInput" />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Total</label>
+          <input type="number" id="totalInput" />
+        </div>
+
+        <hr />
+
+        <div class="input-group">
+          <label>Upload Proposal Pengajuan</label>
+          <input type="file" id="proposalInput" accept=".pdf" />
+        </div>
+
+        <div class="input-group">
+          <label>Upload Invoice</label>
+          <input type="file" id="invoiceInput" accept=".pdf" />
+        </div>
+
+        <div class="input-group">
+          <label>Upload Tagihan CC</label>
+          <input type="file" id="tagihanInput" accept=".pdf" />
+        </div>
+
+        <div class="input-group">
+          <label>Upload Kwitansi (Wajib jika total > Rp5.000.000)</label>
+          <input type="file" id="kwitansiInput" accept=".pdf" />
+        </div>
+
+        <div class="input-group">
+          <label>Upload Justifikasi (Wajib jika total > Rp1.000.000)</label>
+          <input type="file" id="justifikasiInput" accept=".pdf" />
+        </div>
+
+        <div class="input-group">
+          <label>Upload BAST (Wajib jika total > Rp1.000.000)</label>
+          <input type="file" id="bastInput" accept=".pdf" />
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn" onclick="saveLaboranBhp()">
+            Simpan Pengajuan
+          </button>
+          <button class="btn close-btn" onclick="closeLaboranBhpModal()">
+            Tutup
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="modal hidden" id="dokumenModal">
+      <div class="modal-content dokumen-modal">
+        <h2>Kelengkapan Dokumen</h2>
+
+        <div id="dokumenModalBody"></div>
+
+        <div class="modal-actions">
+          <button class="btn close-btn" onclick="closeDokumenModal()">
+            Tutup
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-client.js"></script>
+    <script src="../js/supabase-sync.js"></script>
+    <script src="../js/master-data.js"></script>
+    <script src="../js/activity.js"></script>
+    <script src="../js/notification.js"></script>
+    <script src="../js/file-action.js"></script>
+    <script src="../js/laboran-bhp.js"></script>
+    <script src="../js/main.js"></script>
+  </body>
+</html>

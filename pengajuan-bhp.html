@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Pengajuan BHP</title>
+
+    <link rel="stylesheet" href="../css/style.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+      <link rel="icon" href="../assets/images/Logotlkm.png" />
+  </head>
+
+  <body>
+    <button
+      class="mobile-menu-btn"
+      onclick="toggleSidebar()"
+      aria-label="Buka menu"
+    >
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="mobile-sidebar-overlay" onclick="toggleSidebar()"></div>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div>
+        <div
+          class="sidebar-logo"
+          style="
+            background-color: rgb(222, 142, 142);
+            width: 110%;
+            padding: 20px 0;
+            margin-left: -10px;
+            border-radius: 20px;
+          "
+        >
+          <img
+            src="../assets/images/Logotlkm.png"
+            alt="FRI Dashboard Logo"
+            width="70"
+          />
+
+          <h2>FRI Dashboard</h2>
+        </div>
+
+        <ul class="menu">
+          <li onclick="window.location.href = 'mahasiswa.html'">
+            <i class="fa-solid fa-house"></i>
+            Dashboard
+          </li>
+
+          <li class="active">
+            <i class="fa-solid fa-box"></i>
+            Pengajuan BHP
+          </li>
+
+          <li onclick="window.location.href = 'simulasi-honor.html'">
+            <i class="fa-solid fa-wallet"></i>
+            Simulasi Honor
+          </li>
+        </ul>
+      </div>
+
+      <button class="logout-btn" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Logout
+      </button>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main-content">
+      <div class="topbar">
+        <div>
+          <h1>Pengajuan BHP</h1>
+          <p>Kelola pengajuan barang habis pakai asisten laboratorium</p>
+        </div>
+
+        <button class="btn" onclick="openModal()">Tambah Pengajuan</button>
+      </div>
+
+      <div class="table-section">
+        <table>
+          <thead>
+            <tr>
+              <th>Laboratorium</th>
+              <th>PIC</th>
+              <th>Barang</th>
+              <th>Tanggal</th>
+              <th>Proposal</th>
+              <th>Status</th>
+              <th>Komentar</th>
+              <th>Revisi</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+
+          <tbody id="pengajuanTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal hidden" id="modal">
+      <div class="modal-content">
+        <h2 id="modalTitle">Tambah Pengajuan BHP</h2>
+
+        <div class="input-group">
+          <label>Nama Laboratorium</label>
+
+          <input
+            type="text"
+            id="labInput"
+            placeholder="Contoh: Laboratorium Sispromasi"
+          />
+        </div>
+
+        <div class="input-group">
+          <label>PIC</label>
+          <select id="picInput">
+            <option value="">Pilih PIC</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label>Nama Barang</label>
+
+          <input
+            type="text"
+            id="barangInput"
+            placeholder="Contoh: Kabel LAN, Sensor, ATK"
+          />
+        </div>
+
+        <div class="input-group">
+          <label>Tanggal</label>
+
+          <input type="date" id="tanggalInput" />
+        </div>
+
+        <div class="input-group" id="proposalGroup">
+          <label>Upload Proposal (PDF)</label>
+
+          <input type="file" id="proposalInput" accept=".pdf" />
+        </div>
+
+        <div class="input-group" id="revisiContainer" style="display: none">
+          <label>Upload Bukti Revisi</label>
+
+          <input type="file" id="revisiInput" accept=".pdf" />
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn" onclick="addPengajuan()">Simpan</button>
+
+          <button class="btn close-btn" onclick="closeModal()">Tutup</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-client.js"></script>
+    <script src="../js/supabase-sync.js"></script>
+    <script src="../js/master-data.js"></script>
+    <script src="../js/activity.js"></script>
+    <script src="../js/notification.js"></script>
+    <script src="../js/file-action.js"></script>
+    <script src="../js/bhp.js"></script>
+    <script src="../js/main.js"></script>
+  </body>
+</html>

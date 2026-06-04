@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Simulasi Honorarium</title>
+
+    <!-- CSS -->
+
+    <link rel="stylesheet" href="../css/style.css" />
+
+    <!-- ICON -->
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+
+    <style>
+      .honor-card {
+        background: rgb(7, 104, 28);
+
+        padding: 35px;
+
+        border-radius: 28px;
+
+        margin: 100px auto 0;
+
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+        max-width: 800px;
+
+        width: calc(100% - 40px);
+      }
+
+      .honor-card .input-group {
+        margin-bottom: 24px;
+      }
+
+      .honor-card label {
+        display: block;
+
+        margin-bottom: 10px;
+
+        font-size: 1rem;
+
+        color: #fff;
+      }
+
+      .honor-card input {
+        width: 100%;
+
+        padding: 18px 20px;
+
+        font-size: 1rem;
+
+        border-radius: 18px;
+
+        border: none;
+
+        outline: none;
+
+        box-sizing: border-box;
+      }
+
+      .honor-card .btn {
+        width: 100%;
+
+        padding: 18px 0;
+
+        font-size: 1rem;
+
+        border-radius: 18px;
+      }
+    </style>
+      <link rel="icon" href="../assets/images/Logotlkm.png" />
+  </head>
+
+  <body>
+    <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Buka menu">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="mobile-sidebar-overlay" onclick="toggleSidebar()"></div>
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+      <div>
+        <!-- LOGO -->
+
+        <div
+          class="sidebar-logo"
+          style="
+            background-color: rgb(222, 142, 142);
+            width: 110%;
+            padding: 20px 0;
+            margin-left: -10px;
+            border-radius: 20px;
+          "
+        >
+          <img
+            src="../assets/images/Logotlkm.png"
+            alt="FRI Dashboard Logo"
+            width="70"
+          />
+
+          <h2>FRI Dashboard</h2>
+        </div>
+
+        <!-- MENU -->
+
+        <ul class="menu">
+          <li onclick="window.location.href = 'mahasiswa.html'">
+            <i class="fa-solid fa-house"></i>
+
+            Dashboard
+          </li>
+
+          <li onclick="window.location.href = 'pengajuan-bhp.html'">
+            <i class="fa-solid fa-box"></i>
+
+            Pengajuan BHP
+          </li>
+
+          <li class="active">
+            <i class="fa-solid fa-wallet"></i>
+
+            Simulasi Honor
+          </li>
+        </ul>
+      </div>
+
+      <!-- LOGOUT -->
+
+      <button class="logout-btn" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i>
+
+        Logout
+      </button>
+    </div>
+
+    <!-- MAIN -->
+
+    <div class="main-content">
+      <div class="topbar">
+        <div>
+          <h1>Simulasi Honorarium</h1>
+
+          <p>Hitung estimasi honor asisten laboratorium</p>
+        </div>
+      </div>
+
+      <!-- CARD -->
+
+      <div class="honor-card">
+        <div class="input-group">
+          <label>Jumlah Pertemuan</label>
+
+          <input type="number" id="pertemuan" placeholder="contoh: 14" />
+        </div>
+
+        <div class="input-group">
+          <label>Honor per Pertemuan</label>
+
+          <input type="number" id="honor" placeholder="contoh: 50000" />
+        </div>
+
+        <div class="input-group">
+          <label>Bonus Kegiatan</label>
+
+          <input type="number" id="bonus" placeholder="contoh: 200000" />
+        </div>
+
+        <button class="btn" onclick="hitungHonor()">Hitung Honor</button>
+
+        <!-- HASIL -->
+
+        <div class="hasil-honor">
+          <h2>Total Estimasi Honor</h2>
+
+          <h1 id="totalHonor">Rp 0</h1>
+        </div>
+      </div>
+    </div>
+
+    <!-- JS -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-client.js"></script>
+    <script src="../js/supabase-sync.js"></script>
+    <script src="../js/master-data.js"></script>
+    <script src="../js/notification.js"></script>
+    <script src="../js/file-action.js"></script>
+    <script src="../js/honor.js"></script>
+
+    <script src="../js/main.js"></script>
+  </body>
+</html>

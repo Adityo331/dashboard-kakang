@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simulasi Anggaran</title>
+
+    <link rel="stylesheet" href="../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+      <link rel="icon" href="../assets/images/Logotlkm.png" />
+  </head>
+
+  <body>
+    <button
+      class="mobile-menu-btn"
+      onclick="toggleSidebar()"
+      aria-label="Buka menu"
+    >
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="mobile-sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <div class="sidebar">
+      <div>
+        <div
+          class="sidebar-logo"
+          style="
+            background-color: rgb(222, 142, 142);
+            width: 110%;
+            padding: 20px 0;
+            margin-left: -10px;
+            border-radius: 20px;
+          "
+        >
+          <img
+            src="../assets/images/Logotlkm.png"
+            alt="Logo Telkom"
+            width="70"
+          />
+          <h2>FRI Dashboard</h2>
+        </div>
+
+        <ul class="menu">
+          <li onclick="window.location.href = 'laboran.html'">
+            <i class="fa-solid fa-house"></i>
+            Dashboard Laboran
+          </li>
+
+          <li onclick="window.location.href = 'laboran-pengajuan-bhp.html'">
+            <i class="fa-solid fa-box"></i>
+            Pengajuan BHP
+          </li>
+
+          <li
+            onclick="window.location.href = 'laboran-pengajuan-honorarium.html'"
+          >
+            <i class="fa-solid fa-money-check"></i>
+            Pengajuan Honorarium
+          </li>
+
+          <li class="active">
+            <i class="fa-solid fa-chart-pie"></i>
+            Simulasi Anggaran
+          </li>
+        </ul>
+      </div>
+
+      <button class="logout-btn" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Logout
+      </button>
+    </div>
+
+    <div class="main-content">
+      <div class="topbar">
+        <div>
+          <h1>Simulasi Penggunaan Anggaran</h1>
+          <p>
+            Simulasi honor berbasis modul, shift per modul, asisten per shift,
+            praktikum reguler, internasional, hands on, simulasi bersih, dan
+            BHP.
+          </p>
+        </div>
+
+        <div class="notification-wrapper">
+          <button class="notif-btn" onclick="openNotificationPanel()">
+            <i class="fa-solid fa-bell"></i>
+            <span id="notifBadge" class="notif-badge">0</span>
+          </button>
+
+          <div class="notification-panel hidden" id="notificationPanel">
+            <div class="notif-header">
+              <h3>Notifikasi</h3>
+              <button onclick="markAllNotificationsRead()">
+                Tandai Dibaca
+              </button>
+            </div>
+
+            <div id="notificationList"></div>
+          </div>
+        </div>
+
+        <div class="profile-box">
+          <div class="avatar">L</div>
+          <div>
+            <h4>Staff Laboratorium</h4>
+            <p>Laboran FRI</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="budget-layout">
+        <div class="budget-form-card">
+          <h2>Input Data Simulasi</h2>
+          <p>
+            Hasil simulasi dapat disimpan sementara. Jika ada simulasi Lab A dan
+            Lab B, grafik TW1–TW4 akan otomatis menjumlahkan semua simulasi yang
+            tersimpan.
+          </p>
+
+          <div class="input-group">
+            <label>Total Anggaran Tahunan</label>
+            <input
+              type="number"
+              id="anggaranTahunan"
+              placeholder="Contoh: 1200000000"
+            />
+          </div>
+
+          <div class="quarter-input-grid">
+            <div class="input-group">
+              <label>Nama Laboratorium</label>
+              <input
+                type="text"
+                id="namaLabSimulasi"
+                placeholder="Contoh: Lab Ergonomi"
+              />
+            </div>
+
+            <div class="input-group">
+              <label>Shift per Modul Reguler</label>
+              <input type="number" id="jumlahShift" placeholder="Contoh: 13" />
+            </div>
+
+            <div class="input-group">
+              <label>Jumlah Asisten dalam 1 Shift</label>
+              <input
+                type="number"
+                id="asistenPerShift"
+                placeholder="Contoh: 5"
+              />
+            </div>
+
+            <div class="input-group">
+              <label>Jam per Shift Reguler</label>
+              <input
+                type="number"
+                id="jamJagaPerModul"
+                placeholder="Contoh: 2"
+              />
+            </div>
+
+            <div class="input-group">
+              <label>Honor Reguler per Jam</label>
+              <input
+                type="number"
+                id="honorRegulerPerJam"
+                placeholder="Contoh: 25000"
+              />
+            </div>
+
+            <div class="input-group">
+              <label>Honor Internasional per Jam</label>
+              <input
+                type="number"
+                id="honorInternasionalPerJam"
+                placeholder="Contoh: 35000"
+              />
+            </div>
+
+            <div class="input-group">
+              <label>Honor Hands On per Jam</label>
+              <input
+                type="number"
+                id="honorHandsOnPerJam"
+                placeholder="Contoh: 25000"
+              />
+            </div>
+          </div>
+
+          <h3 style="margin-top: 22px">Data Simulasi per Triwulan</h3>
+          <p class="form-note">
+            TW = Triwulan. Perhitungan reguler menggunakan Modul × Shift per
+            Modul × Asisten/Shift × Jam/Shift × Honor/Jam. Praktikum
+            internasional memiliki honor berbeda. Hands On dihitung seperti
+            kegiatan praktikum, sedangkan Simulasi Bersih dihitung dari jumlah
+            kegiatan × bayaran per kegiatan.
+          </p>
+
+          <div class="simulation-tw-wrapper">
+            <table class="simulation-input-table">
+              <thead>
+                <tr>
+                  <th>TW</th>
+                  <th>Modul Reguler</th>
+                  <th>Estimasi BHP</th>
+                  <th>Modul Internasional</th>
+                  <th>Shift/Modul Internasional</th>
+                  <th>Asisten/Shift Internasional</th>
+                  <th>Kegiatan Hands On</th>
+                  <th>Shift Hands On</th>
+                  <th>Asisten/Shift Hands On</th>
+                  <th>Jam Hands On</th>
+                  <th>Kegiatan Simulasi Bersih</th>
+                  <th>Bayaran/Kegiatan Bersih</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>TW1</td>
+                  <td>
+                    <input type="number" id="tw1RegulerModul" placeholder="0" />
+                  </td>
+                  <td>
+                    <input type="number" id="tw1RegulerBhp" placeholder="0" />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw1InternasionalModul"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw1InternasionalShift"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw1InternasionalAsisten"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw1HandsOnKegiatan"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input type="number" id="tw1HandsOnShift" placeholder="0" />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw1HandsOnAsisten"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input type="number" id="tw1HandsOnJam" placeholder="0" />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw1BersihKegiatan"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw1BersihBayaran"
+                      placeholder="0"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>TW2</td>
+                  <td>
+                    <input type="number" id="tw2RegulerModul" placeholder="0" />
+                  </td>
+                  <td>
+                    <input type="number" id="tw2RegulerBhp" placeholder="0" />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw2InternasionalModul"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw2InternasionalShift"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw2InternasionalAsisten"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw2HandsOnKegiatan"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input type="number" id="tw2HandsOnShift" placeholder="0" />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw2HandsOnAsisten"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input type="number" id="tw2HandsOnJam" placeholder="0" />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw2BersihKegiatan"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw2BersihBayaran"
+                      placeholder="0"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>TW3</td>
+                  <td>
+                    <input type="number" id="tw3RegulerModul" placeholder="0" />
+                  </td>
+                  <td>
+                    <input type="number" id="tw3RegulerBhp" placeholder="0" />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw3InternasionalModul"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw3InternasionalShift"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw3InternasionalAsisten"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw3HandsOnKegiatan"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input type="number" id="tw3HandsOnShift" placeholder="0" />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw3HandsOnAsisten"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input type="number" id="tw3HandsOnJam" placeholder="0" />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw3BersihKegiatan"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw3BersihBayaran"
+                      placeholder="0"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>TW4</td>
+                  <td>
+                    <input type="number" id="tw4RegulerModul" placeholder="0" />
+                  </td>
+                  <td>
+                    <input type="number" id="tw4RegulerBhp" placeholder="0" />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw4InternasionalModul"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw4InternasionalShift"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw4InternasionalAsisten"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw4HandsOnKegiatan"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input type="number" id="tw4HandsOnShift" placeholder="0" />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw4HandsOnAsisten"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input type="number" id="tw4HandsOnJam" placeholder="0" />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw4BersihKegiatan"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      id="tw4BersihBayaran"
+                      placeholder="0"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="sim-action-row">
+            <button class="btn" onclick="hitungSimulasiAnggaran()">
+              Hitung Simulasi
+            </button>
+            <button
+              id="saveSimulationBtn"
+              class="btn btn-save-simulation"
+              onclick="simpanSimulasiSementara()"
+            >
+              Simpan Simulasi Sementara
+            </button>
+            <button class="btn close-btn" onclick="clearSimulationInput()">
+              Reset Input
+            </button>
+          </div>
+        </div>
+
+        <div class="budget-summary-card">
+          <h2>Ringkasan Simulasi Saat Ini</h2>
+
+          <div class="budget-big-number">
+            <span>Total Anggaran</span>
+            <h1 id="hasilAnggaran">Rp 0</h1>
+          </div>
+
+          <div class="budget-big-number green-text">
+            <span>Total Honor Asisten</span>
+            <h1 id="hasilHonor">Rp 0</h1>
+          </div>
+
+          <div class="budget-big-number">
+            <span>Honor Reguler</span>
+            <h1 id="hasilReguler">Rp 0</h1>
+          </div>
+
+          <div class="budget-big-number">
+            <span>Honor Internasional</span>
+            <h1 id="hasilInternasional">Rp 0</h1>
+          </div>
+
+          <div class="budget-big-number">
+            <span>Hands On</span>
+            <h1 id="hasilHandsOn">Rp 0</h1>
+          </div>
+
+          <div class="budget-big-number">
+            <span>Simulasi Bersih</span>
+            <h1 id="hasilBersih">Rp 0</h1>
+          </div>
+
+          <div class="budget-big-number">
+            <span>Total Estimasi BHP</span>
+            <h1 id="hasilBhp">Rp 0</h1>
+          </div>
+
+          <div class="budget-big-number red-text">
+            <span>Total Realisasi Simulasi</span>
+            <h1 id="hasilRealisasi">Rp 0</h1>
+          </div>
+
+          <div class="budget-big-number green-text">
+            <span>Sisa Anggaran</span>
+            <h1 id="hasilSisa">Rp 0</h1>
+          </div>
+        </div>
+      </div>
+
+      <div class="cards simulation-summary-cards">
+        <div class="card">
+          <div class="card-icon red"><i class="fa-solid fa-flask"></i></div>
+          <h2 id="gabunganTotalLab">0</h2>
+          <p>Simulasi Tersimpan</p>
+        </div>
+        <div class="card">
+          <div class="card-icon green">
+            <i class="fa-solid fa-money-check"></i>
+          </div>
+          <h2 id="gabunganTotalHonor">Rp 0</h2>
+          <p>Total Honor Gabungan</p>
+        </div>
+        <div class="card">
+          <div class="card-icon yellow"><i class="fa-solid fa-box"></i></div>
+          <h2 id="gabunganTotalBhp">Rp 0</h2>
+          <p>Total BHP Gabungan</p>
+        </div>
+        <div class="card">
+          <div class="card-icon red">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+          <h2 id="gabunganTotalSimulasi">Rp 0</h2>
+          <p>Total Simulasi Gabungan</p>
+        </div>
+      </div>
+
+      <div class="table-section">
+        <div class="table-header">
+          <div>
+            <h2>Grafik Gabungan Simulasi per Triwulan</h2>
+            <p>
+              Grafik otomatis menjumlahkan semua simulasi laboratorium yang
+              disimpan sementara.
+            </p>
+          </div>
+        </div>
+
+        <div class="bar-chart-box">
+          <div class="bar-item">
+            <div class="bar-wrapper">
+              <div class="bar-fill" id="barTW1"></div>
+            </div>
+            <p>TW1</p>
+            <small id="valueTW1">Rp 0</small>
+          </div>
+          <div class="bar-item">
+            <div class="bar-wrapper">
+              <div class="bar-fill" id="barTW2"></div>
+            </div>
+            <p>TW2</p>
+            <small id="valueTW2">Rp 0</small>
+          </div>
+          <div class="bar-item">
+            <div class="bar-wrapper">
+              <div class="bar-fill" id="barTW3"></div>
+            </div>
+            <p>TW3</p>
+            <small id="valueTW3">Rp 0</small>
+          </div>
+          <div class="bar-item">
+            <div class="bar-wrapper">
+              <div class="bar-fill" id="barTW4"></div>
+            </div>
+            <p>TW4</p>
+            <small id="valueTW4">Rp 0</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-section">
+        <div class="table-header">
+          <div>
+            <h2>Rincian Simulasi Saat Ini</h2>
+            <p>
+              Rincian hasil perhitungan berdasarkan input yang sedang dihitung.
+            </p>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>TW</th>
+              <th>Honor Reguler</th>
+              <th>Honor Internasional</th>
+              <th>Hands On</th>
+              <th>Simulasi Bersih</th>
+              <th>BHP</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="simulasiTable"></tbody>
+        </table>
+      </div>
+
+      <div class="table-section">
+        <div class="table-header">
+          <div>
+            <h2>Daftar Simulasi Tersimpan</h2>
+            <p>
+              Simulasi dari beberapa lab akan digabung otomatis pada grafik dan
+              total ringkasan.
+            </p>
+          </div>
+          <button class="btn-delete" onclick="hapusSemuaSimulasi()">
+            Hapus Semua Simulasi
+          </button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Laboratorium</th>
+              <th>TW1</th>
+              <th>TW2</th>
+              <th>TW3</th>
+              <th>TW4</th>
+              <th>Total Honor</th>
+              <th>Total Simulasi</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="savedSimulationTable"></tbody>
+        </table>
+      </div>
+
+      <div class="table-section daily-section">
+        <div class="table-header">
+          <div>
+            <h2>Input Penggunaan Anggaran Harian</h2>
+            <p>
+              Catat transaksi harian agar simulasi anggaran terlihat lebih
+              realistis.
+            </p>
+          </div>
+        </div>
+
+        <div class="daily-input-grid-fixed">
+          <div class="input-group">
+            <label>Tanggal Transaksi</label>
+            <input type="date" id="dailyDate" />
+          </div>
+          <div class="input-group">
+            <label>Deskripsi</label>
+            <input
+              type="text"
+              id="dailyDesc"
+              placeholder="Contoh: Pembelian toner printer"
+            />
+          </div>
+          <div class="input-group">
+            <label>Kategori</label>
+            <select id="dailyCategory">
+              <option>BHP</option>
+              <option>Honorarium</option>
+              <option>Maintenance</option>
+              <option>Operasional</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Nominal</label>
+            <input
+              type="number"
+              id="dailyAmount"
+              placeholder="Contoh: 840000"
+            />
+          </div>
+        </div>
+
+        <button class="btn daily-btn" onclick="addDailyTransaction()">
+          Tambah Transaksi
+        </button>
+
+        <div class="daily-table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Deskripsi</th>
+                <th>Kategori</th>
+                <th>Nominal</th>
+                <th>Triwulan</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="dailyTransactionTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="table-section">
+        <div class="table-header">
+          <div>
+            <h2>Analisis Simulasi</h2>
+            <p>Hasil evaluasi otomatis dari penggunaan anggaran tahunan.</p>
+          </div>
+        </div>
+
+        <div class="analysis-box" id="analysisBox">
+          Masukkan data simulasi untuk melihat hasil analisis.
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-client.js"></script>
+    <script src="../js/supabase-sync.js"></script>
+    <script src="../js/notification.js"></script>
+    <script src="../js/file-action.js"></script>
+    <script src="../js/master-data.js"></script>
+    <script src="../js/activity.js"></script>
+    <script src="../js/laboran-simulasi-anggaran.js"></script>
+    <script src="../js/main.js"></script>
+  </body>
+</html>

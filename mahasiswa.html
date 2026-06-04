@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Dashboard Mahasiswa</title>
+
+    <link rel="stylesheet" href="../css/style.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+      <link rel="icon" href="../assets/images/Logotlkm.png" />
+  </head>
+
+  <body>
+    <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Buka menu">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="mobile-sidebar-overlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar">
+      <div>
+        <div
+          class="sidebar-logo"
+          style="
+            background-color: rgb(222, 142, 142);
+            width: 110%;
+            padding: 20px 0;
+            margin-left: -10px;
+            border-radius: 20px;
+          "
+        >
+          <img
+            src="../assets/images/Logotlkm.png"
+            alt="FRI Dashboard Logo"
+            width="70"
+          />
+
+          <h2>FRI Dashboard</h2>
+        </div>
+
+        <ul class="menu">
+          <li class="active">
+            <i class="fa-solid fa-house"></i>
+            Dashboard
+          </li>
+
+          <li onclick="window.location.href = 'pengajuan-bhp.html'">
+            <i class="fa-solid fa-box"></i>
+            Pengajuan BHP
+          </li>
+
+          <li onclick="window.location.href = 'simulasi-honor.html'">
+            <i class="fa-solid fa-wallet"></i>
+            Simulasi Honor
+          </li>
+        </ul>
+      </div>
+
+      <button class="logout-btn" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Logout
+      </button>
+    </div>
+
+    <div class="main-content">
+      <div class="topbar">
+        <div>
+          <h1>Dashboard Mahasiswa</h1>
+          <p>Monitoring pengajuan BHP dan honorarium asisten laboratorium</p>
+        </div>
+
+        <div class="notification-wrapper">
+          <button class="notif-btn" onclick="openNotificationPanel()">
+            <i class="fa-solid fa-bell"></i>
+            <span id="notifBadge" class="notif-badge">0</span>
+          </button>
+
+          <div class="notification-panel hidden" id="notificationPanel">
+            <div class="notif-header">
+              <h3>Notifikasi</h3>
+              <button onclick="markAllNotificationsRead()">Tandai Dibaca</button>
+            </div>
+
+            <div id="notificationList"></div>
+          </div>
+        </div>
+
+        <div class="profile-box">
+          <div class="avatar">M</div>
+
+          <div>
+            <h4>Mahasiswa</h4>
+            <p>Asisten Laboratorium</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon red">
+            <i class="fa-solid fa-box"></i>
+          </div>
+
+          <h2 id="totalPengajuan">0</h2>
+          <p>Total Pengajuan</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon green">
+            <i class="fa-solid fa-check"></i>
+          </div>
+
+          <h2 id="approvedPengajuan">0</h2>
+          <p>Approved</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon yellow">
+            <i class="fa-solid fa-clock"></i>
+          </div>
+
+          <h2 id="pendingPengajuan">0</h2>
+          <p>Pending</p>
+        </div>
+      </div>
+
+      <div class="table-section">
+        <div class="table-header">
+          <h2>Status Pengajuan Terbaru</h2>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Laboratorium</th>
+              <th>Barang</th>
+              <th>Status</th>
+              <th>Tanggal</th>
+            </tr>
+          </thead>
+
+          <tbody id="dashboardTable"></tbody>
+        </table>
+      </div>
+
+      <div class="table-section">
+        <div class="table-header">
+          <h2>Tracking Status Pengajuan</h2>
+        </div>
+
+        <div class="tracking-container">
+          <div class="tracking-card approved">
+            <div class="tracking-icon">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+
+            <div>
+              <h3>Approved</h3>
+              <p id="approvedTrackingText">0 pengajuan disetujui</p>
+            </div>
+          </div>
+
+          <div class="tracking-card pending">
+            <div class="tracking-icon">
+              <i class="fa-solid fa-clock"></i>
+            </div>
+
+            <div>
+              <h3>Pending</h3>
+              <p id="pendingTrackingText">0 menunggu validasi</p>
+            </div>
+          </div>
+
+          <div class="tracking-card reject">
+            <div class="tracking-icon">
+              <i class="fa-solid fa-circle-xmark"></i>
+            </div>
+
+            <div>
+              <h3>Rejected</h3>
+              <p id="rejectedTrackingText">0 pengajuan ditolak</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-client.js"></script>
+    <script src="../js/supabase-sync.js"></script>
+    <script src="../js/master-data.js"></script>
+    <script src="../js/notification.js"></script>
+    <script src="../js/file-action.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script src="../js/main.js"></script>
+  </body>
+</html>

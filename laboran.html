@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Dashboard Laboran</title>
+
+    <link rel="stylesheet" href="../css/style.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+      <link rel="icon" href="../assets/images/Logotlkm.png" />
+  </head>
+
+  <body>
+    <button
+      class="mobile-menu-btn"
+      onclick="toggleSidebar()"
+      aria-label="Buka menu"
+    >
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="mobile-sidebar-overlay" onclick="toggleSidebar()"></div>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div>
+        <div
+          class="sidebar-logo"
+          style="
+            background-color: rgb(222, 142, 142);
+            width: 110%;
+            padding: 20px 0;
+            margin-left: -10px;
+            border-radius: 20px;
+          "
+        >
+          <img
+            src="../assets/images/Logotlkm.png"
+            alt="Logo Telkom"
+            width="70"
+          />
+
+          <h2>FRI Dashboard</h2>
+        </div>
+
+        <ul class="menu">
+          <li class="active">
+            <i class="fa-solid fa-house"></i>
+            Dashboard Laboran
+          </li>
+
+          <li onclick="window.location.href = 'laboran-pengajuan-bhp.html'">
+            <i class="fa-solid fa-box"></i>
+            Pengajuan BHP
+          </li>
+
+          <li
+            onclick="window.location.href = 'laboran-pengajuan-honorarium.html'"
+          >
+            <i class="fa-solid fa-money-check"></i>
+            Pengajuan Honorarium
+          </li>
+
+          <li onclick="window.location.href = 'laboran-simulasi-anggaran.html'">
+            <i class="fa-solid fa-chart-pie"></i>
+            Simulasi Anggaran
+          </li>
+        </ul>
+      </div>
+
+      <button class="logout-btn" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Logout
+      </button>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main-content">
+      <!-- TOPBAR -->
+      <div class="topbar">
+        <div>
+          <h1>Dashboard Laboran</h1>
+          <p>Monitoring, approval, dan pengajuan BHP Laboratorium FRI</p>
+        </div>
+
+        <div class="notification-wrapper">
+          <button class="notif-btn" onclick="openNotificationPanel()">
+            <i class="fa-solid fa-bell"></i>
+            <span id="notifBadge" class="notif-badge">0</span>
+          </button>
+
+          <div class="notification-panel hidden" id="notificationPanel">
+            <div class="notif-header">
+              <h3>Notifikasi</h3>
+              <button onclick="markAllNotificationsRead()">
+                Tandai Dibaca
+              </button>
+            </div>
+
+            <div id="notificationList"></div>
+          </div>
+        </div>
+
+        <div class="profile-box">
+          <div class="avatar">L</div>
+
+          <div>
+            <h4>Staff Laboratorium</h4>
+            <p>Laboran FRI</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARDS -->
+      <div class="cards">
+        <div class="card stat-card">
+          <div class="stat-info">
+            <h2 id="totalPengajuan">0</h2>
+            <p>Total Pengajuan</p>
+          </div>
+
+          <div class="card-icon red ornament-icon">
+            <i class="fa-solid fa-box"></i>
+          </div>
+        </div>
+
+        <div class="card stat-card">
+          <div class="stat-info">
+            <h2 id="pendingPengajuan">0</h2>
+            <p>Pending</p>
+          </div>
+
+          <div class="card-icon yellow ornament-icon">
+            <i class="fa-solid fa-clock"></i>
+          </div>
+        </div>
+
+        <div class="card stat-card">
+          <div class="stat-info">
+            <h2 id="approvedPengajuan">0</h2>
+            <p>Approved</p>
+          </div>
+
+          <div class="card-icon green ornament-icon">
+            <i class="fa-solid fa-check"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABLE -->
+      <div class="table-section">
+        <div class="table-header">
+          <div>
+            <h2>Approval & Pengajuan BHP</h2>
+            <p>Daftar pengajuan BHP yang perlu divalidasi</p>
+          </div>
+
+          <div class="validation-banner">
+            <i class="fa-solid fa-circle-info"></i>
+
+            <span>
+              Segera cek pengajuan dan lakukan validasi pengajuan BHP mahasiswa
+            </span>
+          </div>
+        </div>
+        <div class="filter-section">
+          <input type="date" id="filterTanggal" onchange="renderLaboran()" />
+
+          <select id="filterLab" onchange="renderLaboran()">
+            <option value="">Semua Laboratorium</option>
+          </select>
+
+          <button class="btn close-btn" onclick="resetFilterLaboran()">
+            Reset
+          </button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Pengaju</th>
+              <th>Laboratorium</th>
+              <th>PIC</th>
+              <th>Barang</th>
+              <th>Tanggal</th>
+              <th>Proposal</th>
+              <th>Status</th>
+              <th>Komentar</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+
+          <tbody id="laboranTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MODAL TAMBAH PENGAJUAN BHP -->
+    <div class="modal hidden" id="laboranModal">
+      <div class="modal-content">
+        <h2>Tambah Pengajuan BHP</h2>
+
+        <div class="input-group">
+          <label>Laboratorium</label>
+
+          <select id="labInput">
+            <option>Lab Ergonomi</option>
+            <option>Lab Produksi</option>
+            <option>Lab K3</option>
+            <option>Lab Sistem Informasi</option>
+            <option>Lab Supply Chain</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label>Nama Barang</label>
+
+          <input
+            type="text"
+            id="barangInput"
+            placeholder="Contoh: Kabel LAN, Sensor, ATK"
+          />
+        </div>
+
+        <div class="input-group">
+          <label>Tanggal Pengajuan</label>
+
+          <input type="date" id="tanggalInput" />
+        </div>
+
+        <div class="input-group">
+          <label>Upload Proposal ACC Pembina Lab (PDF)</label>
+
+          <input type="file" id="proposalInput" accept=".pdf" />
+        </div>
+
+        <button class="btn" onclick="addLaboranPengajuan()">
+          Simpan Pengajuan
+        </button>
+
+        <button class="btn close-btn" onclick="closeLaboranModal()">
+          Tutup
+        </button>
+      </div>
+    </div>
+    <!-- MODAL KOMENTAR REJECT -->
+    <div class="modal hidden" id="rejectModal">
+      <div class="modal-content">
+        <h2>Catatan Revisi Pengajuan</h2>
+
+        <div class="input-group">
+          <label>Komentar Revisi</label>
+
+          <textarea
+            id="rejectKomentarInput"
+            rows="6"
+            placeholder="Tuliskan catatan revisi untuk mahasiswa..."
+          ></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-reject" onclick="submitReject()">
+            Kirim Revisi
+          </button>
+
+          <button class="btn close-btn" onclick="closeRejectModal()">
+            Tutup
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- MODAL PENERUSAN PENGAJUAN -->
+    <div class="modal hidden" id="approveModal">
+      <div class="modal-content approve-modal">
+        <h2>Penerusan Pengajuan</h2>
+
+        <div class="input-row">
+          <div class="input-group">
+            <label>Lab Praktikum</label>
+            <input type="text" id="approveLab" readonly />
+          </div>
+
+          <div class="input-group">
+            <label>Nama Barang</label>
+            <input type="text" id="approveBarang" readonly />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Detail</label>
+          <textarea
+            id="approveDetail"
+            rows="4"
+            placeholder="Tuliskan detail kebutuhan barang..."
+          ></textarea>
+        </div>
+
+        <div class="input-group">
+          <label>Link Pembelian</label>
+          <input
+            type="text"
+            id="approveLink"
+            placeholder="Masukkan link pembelian barang"
+          />
+        </div>
+
+        <div class="input-group">
+          <label>Jenis Kebutuhan</label>
+          <input
+            type="text"
+            id="approveJenis"
+            placeholder="Contoh: Operasional Praktikum"
+          />
+        </div>
+
+        <div class="input-row">
+          <div class="input-group">
+            <label>Justifikasi</label>
+            <textarea
+              id="approveJustifikasi"
+              rows="3"
+              placeholder="Tuliskan alasan kebutuhan..."
+            ></textarea>
+          </div>
+
+          <div class="input-group">
+            <label>Tanggal Penggunaan</label>
+            <input type="date" id="approveTanggalPenggunaan" />
+          </div>
+        </div>
+
+        <div class="input-row">
+          <div class="input-group">
+            <label>PIC</label>
+            <input type="text" id="approvePic" placeholder="Nama PIC" />
+          </div>
+
+          <div class="input-group">
+            <label>Tipe Pertanggungan</label>
+            <input
+              type="text"
+              id="approveTipe"
+              placeholder="Contoh: Reimbursement / Pembelian Langsung"
+            />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Total</label>
+          <input
+            type="number"
+            id="approveTotal"
+            placeholder="Contoh: 1500000"
+          />
+        </div>
+
+        <hr />
+
+        <div class="input-group" id="existingProposalGroup">
+          <label>Proposal Pengajuan dari Asisten</label>
+          <div class="existing-proposal-box">
+            <span id="existingProposalName">-</span>
+            <div class="pdf-action">
+              <button
+                type="button"
+                class="btn-preview"
+                onclick="
+                  previewLaboranFile(
+                    document.getElementById('existingProposalName').innerText,
+                  )
+                "
+              >
+                Preview
+              </button>
+              <button
+                type="button"
+                class="btn-download"
+                onclick="
+                  downloadLaboranFile(
+                    document.getElementById('existingProposalName').innerText,
+                  )
+                "
+              >
+                Download
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Upload Invoice</label>
+          <input type="file" id="docInvoice" accept=".pdf" />
+        </div>
+
+        <div class="input-group">
+          <label>Upload Kwitansi (Wajib jika total > Rp5.000.000)</label>
+          <input type="file" id="docKwitansi" accept=".pdf" />
+        </div>
+
+        <div class="input-group">
+          <label>Upload Tagihan CC</label>
+          <input type="file" id="docTagihan" accept=".pdf" />
+        </div>
+
+        <div class="input-group">
+          <label>Upload Justifikasi (Wajib jika total > Rp1.000.000)</label>
+          <input type="file" id="docJustifikasi" accept=".pdf" />
+        </div>
+
+        <div class="input-group">
+          <label>Upload BAST (Wajib jika total > Rp1.000.000)</label>
+          <input type="file" id="docBast" accept=".pdf" />
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-reject" onclick="closeApproveModal()">
+            Tolak
+          </button>
+
+          <button class="btn" onclick="submitApproveToKeuangan()">
+            Setujui Ajuan
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL DETAIL PENGAJUAN -->
+    <div class="modal hidden" id="detailPengajuanModal">
+      <div class="modal-content detail-modal">
+        <h2>Detail Pengajuan BHP</h2>
+        <div id="detailPengajuanBody"></div>
+        <div class="modal-actions">
+          <button class="btn close-btn" onclick="closeDetailPengajuanModal()">
+            Tutup
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-client.js"></script>
+    <script src="../js/supabase-sync.js"></script>
+    <script src="../js/master-data.js"></script>
+    <script src="../js/activity.js"></script>
+    <script src="../js/notification.js"></script>
+    <script src="../js/file-action.js"></script>
+    <script src="../js/laboran.js"></script>
+    <script src="../js/main.js"></script>
+  </body>
+</html>
